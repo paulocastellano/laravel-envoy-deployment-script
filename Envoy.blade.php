@@ -33,11 +33,12 @@
     git clone {{ $repository }} --branch={{ $branch }} --depth=1 -q {{ $release }}
     {{ logMessage("Repository cloned ✅") }}
 
-    ln -s {{ $env }} {{ $release }}/.env
-    {{ logMessage("Env file ✅") }}
+    ln -nfs {{ $env }} {{ $release }}/.env
+    {{ logMessage("Env file linked: [$env] symlinked to [$release]/.env ✅") }}
 
-    ln -s {{ $storage }} {{ $release }}/storage
-    {{ logMessage("Storage ✅") }}
+    rm -rf {{ $release }}/storage
+    ln -nfs {{ $storage }} {{ $release }}/storage
+    {{ logMessage("Storage linked: [$storage] symlinked to [$release/storage] ✅") }}
 @endtask
 
 @task('migration', ['on' => ['serverOne']])
